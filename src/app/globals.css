@@ -1,0 +1,32 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --font-sans: var(--font-tajawal), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
+  
+  --color-dragon: #f5cf65;
+  --color-dragon-hover: #e5b945;
+  
+  --color-brand-primary: #f97316; /* orange-500 */
+  --color-brand-secondary: #0ea5e9; /* sky-500 */
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  
+  html {
+    @apply antialiased scroll-smooth;
+  }
+  
+  body {
+    @apply bg-slate-950 text-slate-100 font-sans tracking-tight min-h-screen flex flex-col;
+    direction: rtl;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-normal;
+  }
+}
