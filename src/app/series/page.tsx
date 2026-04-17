@@ -7,6 +7,9 @@ export const metadata = {
   description: 'اختر سلسلة دراغون بول المفضلة لديك وابدأ التحدي الآن!',
 };
 
+import SectionIntro from '@/components/ui/SectionIntro';
+import InfoNotice from '@/components/ui/InfoNotice';
+
 export default async function SeriesPage() {
   const pb = await getPbServerClient();
   
@@ -15,12 +18,17 @@ export default async function SeriesPage() {
   }
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
-      <div className="space-y-2">
-        <h1 className="text-3xl md:text-4xl font-black font-display text-white">اختر التحدي</h1>
-        <p className="text-slate-400">أي جزء من القصة تريد اختباره؟ اختر السلسلة وابدأ رفع مستوى طاقتك.</p>
-      </div>
+    <div className="space-y-10 animate-in fade-in duration-500">
+      <SectionIntro 
+        title="اختر التحدي"
+        subtitle="أي جزء من القصة تريد اختباره؟ اختر السلسلة وابدأ رفع مستوى طاقتك."
+        eyebrow="رحلة المقاتل"
+      />
       
+      <InfoNotice tone="info" className="max-w-3xl">
+        ابدأ بالسلسلة التي تعرفها أكثر. كل إجابة صحيحة ترفع مستوى طاقتك وتقربك من تصدر لوحة الشرف العالمية!
+      </InfoNotice>
+
       <SeriesGrid />
     </div>
   );

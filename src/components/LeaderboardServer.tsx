@@ -5,6 +5,8 @@ import { getPowerLevelTitle } from '@/lib/gamification';
 import { formatNumber } from '@/lib/utils';
 import { Trophy, Medal, Crown } from 'lucide-react';
 
+import LeaderboardInsight from './leaderboard/LeaderboardInsight';
+
 export default async function LeaderboardServer() {
   const adminClient = await getPbAdminClient();
   const pb = await getPbServerClient();
@@ -33,6 +35,22 @@ export default async function LeaderboardServer() {
     }
   }
 
+  // Determine current user rank and next rank
+  let userRank: number | null = null;
+  let nextRankScore: number | null = null;
+  let userScore: number | null = null;
+
+  if (currentUser) {
+    const userIndex = leaderboard.findIndex(entry => entry.user === currentUser.id);
+    if (userIndex !== -1) {
+      userRank = userIndex + 1;
+      userScore = leaderboard[userIndex].score;
+      if (userIndex > 0) {
+        nextRankScore = leaderboard[userIndex - 1].score;
+      }
+    }
+  }
+
   if (leaderboard.length === 0) {
     return (
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center text-slate-400">
@@ -43,15 +61,22 @@ export default async function LeaderboardServer() {
   }
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
-      <div className="p-6 sm:p-8 border-b border-slate-800 bg-slate-800/30">
-        <h2 className="text-2xl font-bold font-display text-white flex items-center gap-3">
-          <Trophy className="text-yellow-500" />
-          <span>أقوى محاربي الكون</span>
-        </h2>
-      </div>
-      <div className="divide-y divide-slate-800/50">
-        {leaderboard.map((entry, index) => {
+    <div className="space-y-4">
+      <LeaderboardInsight 
+        currentUserRank={userRank}
+        currentUserScore={userScore}
+        nextRankScore={nextRankScore}
+      />
+
+      <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+        <div className="p-6 sm:p-8 border-b border-slate-800 bg-slate-800/30">
+          <h2 className="text-2xl font-bold font-display text-white flex items-center gap-3">
+            <Trophy className="text-yellow-500" />
+            <span>أقوى محاربي الكون</span>
+          </h2>
+        </div>
+        <div className="divide-y divide-slate-800/50">
+          {leaderboard.map((entry, index) => {
           const user = entry.expand?.user;
           const isCurrentUser = currentUser?.id === user?.id;
           
@@ -100,5 +125,6 @@ export default async function LeaderboardServer() {
         })}
       </div>
     </div>
+  </div>
   );
 }

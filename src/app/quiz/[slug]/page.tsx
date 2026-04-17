@@ -7,6 +7,9 @@ import crypto from 'crypto';
 import QuizUI from '@/components/QuizUI';
 import { UserRecord } from '@/lib/types';
 
+import QuizSessionHeader from '@/components/quiz/QuizSessionHeader';
+import { QUIZ_TOTAL_STEPS } from '@/lib/ux';
+
 export default async function QuizPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
   const pb = await getPbServerClient();
@@ -34,23 +37,16 @@ export default async function QuizPage(props: { params: Promise<{ slug: string }
   });
 
   return (
-    <div className="w-full max-w-3xl mx-auto py-8">
-      <div className="mb-8 flex items-center justify-between text-slate-300">
-        <div>
-          <h1 className="text-2xl font-bold font-display text-white">{series.title}</h1>
-          <p className="text-sm">سؤال جديد لك يا {user.display_name}!</p>
-        </div>
-        <div className="text-left" dir="ltr">
-          <div className="text-orange-500 font-bold">الطاقة: {user.power_level}</div>
-          <div className="text-yellow-500 text-sm">المتتاليات: {user.streak}🔥</div>
-        </div>
-      </div>
-      
+    <div className="w-full max-w-3xl mx-auto py-4 sm:py-8">
       <QuizUI 
+        key={safeQuestion.id}
         question={safeQuestion} 
         token={token} 
         durationSeconds={30}
         initialPowerLevel={user.power_level}
+        userStreak={user.streak}
+        seriesTitle={series.title}
+        userDisplayName={user.display_name}
       />
     </div>
   );

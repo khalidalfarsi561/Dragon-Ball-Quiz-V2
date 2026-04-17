@@ -71,26 +71,46 @@ export default async function SeriesDetailPage(props: { params: Promise<{ slug: 
         </div>
       </div>
       
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8">
-        <h2 className="text-xl font-bold font-display text-white mb-4">قواعد التحدي</h2>
-        <ul className="space-y-3 text-slate-300">
-          <li className="flex gap-3">
-            <span className="text-orange-500 font-bold">•</span>
-            <span>كل إجابة صحيحة تزيد من مستوى طاقتك!</span>
-          </li>
-          <li className="flex gap-3">
-            <span className="text-orange-500 font-bold">•</span>
-            <span>الإجابات المتتالية الصحيحة (Streak) تمنحك مضاعف نقاط.</span>
-          </li>
-          <li className="flex gap-3">
-            <span className="text-orange-500 font-bold">•</span>
-            <span>احذر! الإجابة الخاطئة ستفقدك جزءاً من طاقتك.</span>
-          </li>
-          <li className="flex gap-3">
-            <span className="text-orange-500 font-bold">•</span>
-            <span>لديك وقت محدد لكل سؤال، السرعة تلعب دوراً.</span>
-          </li>
-        </ul>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8">
+          <h2 className="text-xl font-bold font-display text-white mb-4">قواعد التحدي</h2>
+          <ul className="space-y-3 text-slate-300">
+            <li className="flex gap-3">
+              <span className="text-orange-500 font-bold">•</span>
+              <span>كل إجابة صحيحة تزيد من مستوى طاقتك!</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-orange-500 font-bold">•</span>
+              <span>الإجابات المتتالية الصحيحة (Streak) تمنحك مضاعف نقاط.</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-orange-500 font-bold">•</span>
+              <span>احذر! الإجابة الخاطئة ستفقدك جزءاً من طاقتك.</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-orange-500 font-bold">•</span>
+              <span>لديك وقت محدد لكل سؤال، السرعة تلعب دوراً.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="bg-orange-500/5 border border-orange-500/10 rounded-2xl p-6 sm:p-8">
+          <h2 className="text-xl font-bold font-display text-orange-400 mb-4">ماذا ينتظرك؟</h2>
+          <ul className="space-y-4 text-slate-300 text-sm">
+            <li className="flex gap-3">
+              <span className="shrink-0 w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-xs">1</span>
+              <span>سيبدأ التحدي بعد عد تنازلي قصير للاستعداد.</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="shrink-0 w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-xs">2</span>
+              <span>سترى تقدمك في كل سؤال حتى تنهي الجولة.</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="shrink-0 w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-xs">3</span>
+              <span>بعد كل إجابة، ستحصل على شرح مفصل وتحديث لحظي لترتيبك.</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );

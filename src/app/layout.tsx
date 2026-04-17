@@ -45,7 +45,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="ar" dir="rtl" className={`${tajawal.variable} ${cairo.variable} dark`}>
       <body className="min-h-screen flex flex-col bg-slate-950 text-slate-100 antialiased selection:bg-orange-500/30">
         <Header />
-        <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col pt-20">
+        <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col pt-24 sm:pt-28">
           {children}
         </main>
         <footer className="text-center py-6 text-sm text-slate-500 border-t border-slate-800/50 mt-auto">

@@ -10,6 +10,9 @@ export const metadata = {
   title: 'بطاقة المقاتل | دراغون بول كويز',
 };
 
+import ProgressStrip from '@/components/ui/ProgressStrip';
+import { getNextMilestone } from '@/lib/ux';
+
 export default async function QuizProfilePage() {
   const pb = await getPbServerClient();
   const user = pb.authStore.record as unknown as UserRecord | null;
@@ -19,6 +22,7 @@ export default async function QuizProfilePage() {
   }
 
   const title = getPowerLevelTitle(user.power_level);
+  const milestone = getNextMilestone(user.power_level);
 
   return (
     <div className="max-w-md mx-auto w-full py-12 px-4 animate-in fade-in duration-500">
@@ -48,10 +52,18 @@ export default async function QuizProfilePage() {
           </div>
           <div className="bg-slate-800 rounded-2xl p-4 border border-slate-700">
             <div className="text-slate-400 text-sm mb-1">المتتالية</div>
-            <div className="text-xl font-black text-white font-mono">
-              {user.streak} 🔥
+            <div className="text-xl font-black text-white font-mono" dir="ltr">
+              {user.streak}🔥
             </div>
           </div>
+        </div>
+
+        <div className="mb-10 text-right">
+          <ProgressStrip 
+            value={milestone.percent}
+            label={`لـلـهـدف ${milestone.next}`}
+            sublabel={`${Math.round(milestone.percent)}%`}
+          />
         </div>
 
         <Link 
