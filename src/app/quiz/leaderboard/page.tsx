@@ -1,6 +1,6 @@
 import LeaderboardServer from '@/components/LeaderboardServer';
+import LeaderboardSkeleton from '@/components/LeaderboardSkeleton';
 import { Suspense } from 'react';
-import { Loader2 } from 'lucide-react';
 
 export const metadata = {
   title: 'لوحة الشرف | دراغون بول كويز',
@@ -19,11 +19,7 @@ export default function LeaderboardPage() {
         </p>
       </div>
       
-      <Suspense fallback={
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-24 flex items-center justify-center">
-          <Loader2 className="animate-spin text-orange-500" size={48} />
-        </div>
-      }>
+      <Suspense fallback={<LeaderboardSkeleton />}>
         <LeaderboardServer />
       </Suspense>
     </div>

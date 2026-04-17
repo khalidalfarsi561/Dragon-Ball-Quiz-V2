@@ -50,6 +50,7 @@ export default async function QuizPage(props: { params: Promise<{ slug: string }
         question={safeQuestion} 
         token={token} 
         durationSeconds={30}
+        initialPowerLevel={user.power_level}
       />
     </div>
   );
