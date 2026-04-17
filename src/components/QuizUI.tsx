@@ -7,7 +7,7 @@ import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
-import { QUIZ_TOTAL_STEPS, QUIZ_WARMUP_SECONDS, FIRST_QUESTION_NO_TIMER } from '@/lib/ux';
+import { QUIZ_TOTAL_STEPS, QUIZ_WARMUP_SECONDS, FIRST_QUESTION_NO_TIMER, DBQ_SESSION_SERIES_KEY, DBQ_SESSION_STEP_KEY, DBQ_SESSION_STARTED_AT_KEY } from '@/lib/ux';
 
 import QuizWarmupOverlay from './quiz/QuizWarmupOverlay';
 import QuizSessionHeader from './quiz/QuizSessionHeader';
@@ -29,15 +29,20 @@ interface QuizUIProps {
   userDisplayName: string;
 }
 
-type QuizSubmitResult = {
+type QuizSubmitSuccess = {
   success: true;
   isCorrect: boolean;
   correctAnswerIndex: number;
   explanation: string;
   newPowerLevel: number;
   newStreak: number;
-  error?: string;
 };
+
+type QuizSubmitError = {
+  error: string;
+};
+
+type QuizSubmitResponse = QuizSubmitSuccess | QuizSubmitError;
 
 export default function QuizUI({ 
   question, 
@@ -50,48 +55,59 @@ export default function QuizUI({
 }: QuizUIProps) {
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [result, setResult] = useState<QuizSubmitResult | null>(null);
+  const [result, setResult] = useState<QuizSubmitSuccess | null>(null);
   const [timeLeft, setTimeLeft] = useState(durationSeconds);
   const [warmupDone, setWarmupDone] = useState(false);
   const hasSubmittedRef = useRef(false);
   const router = useRouter();
 
-  // Initialize Session State
-  const [currentStep, setCurrentStep] = useState(() => {
+  // Session Helpers
+  const readSessionStep = useCallback((seriesSlug: string): number => {
     if (typeof window === 'undefined') return 1;
-    const sessionSeries = sessionStorage.getItem('dbq_session_series');
-    if (sessionSeries === question.series_slug) {
-      const savedStep = sessionStorage.getItem('dbq_session_step');
-      return savedStep ? parseInt(savedStep, 10) : 1;
-    }
-    // New series session
-    sessionStorage.setItem('dbq_session_series', question.series_slug);
-    sessionStorage.setItem('dbq_session_step', '1');
-    return 1;
-  });
+    const sessionSeries = sessionStorage.getItem(DBQ_SESSION_SERIES_KEY);
+    if (sessionSeries !== seriesSlug) return 1;
+    
+    const savedStep = sessionStorage.getItem(DBQ_SESSION_STEP_KEY);
+    const parsed = savedStep ? parseInt(savedStep, 10) : 1;
+    
+    if (isNaN(parsed) || parsed < 1 || parsed > QUIZ_TOTAL_STEPS) return 1;
+    return parsed;
+  }, []);
+
+  const resetQuizSession = useCallback((seriesSlug: string): void => {
+    if (typeof window === 'undefined') return;
+    sessionStorage.setItem(DBQ_SESSION_SERIES_KEY, seriesSlug);
+    sessionStorage.setItem(DBQ_SESSION_STEP_KEY, '1');
+    sessionStorage.setItem(DBQ_SESSION_STARTED_AT_KEY, Date.now().toString());
+  }, []);
+
+  // Initialize Session State
+  const [currentStep, setCurrentStep] = useState(() => readSessionStep(question.series_slug));
 
   // Handle Submission Logic
   const submit = useCallback(async (index: number) => {
-    if (hasSubmittedRef.current) return;
+    if (hasSubmittedRef.current || result) return;
     hasSubmittedRef.current = true;
     
     setIsSubmitting(true);
     setSelectedIdx(index);
     try {
-      const res = await submitAnswer(token, index) as any;
-      if (res.error) {
+      const res = await submitAnswer(token, index) as QuizSubmitResponse;
+      if ('error' in res) {
         toast.error(res.error);
         hasSubmittedRef.current = false;
+        setSelectedIdx(null);
       } else {
-        setResult(res as QuizSubmitResult);
+        setResult(res);
       }
     } catch {
       toast.error('حدث رمز خطأ غير معروف');
       hasSubmittedRef.current = false;
+      setSelectedIdx(null);
     } finally {
       setIsSubmitting(false);
     }
-  }, [token]);
+  }, [token, result]);
 
   // Timer Logic
   useEffect(() => {
@@ -101,7 +117,7 @@ export default function QuizUI({
     if (currentStep === 1 && FIRST_QUESTION_NO_TIMER) return;
     
     const handleTimeOut = async () => {
-      if (hasSubmittedRef.current) return;
+      if (hasSubmittedRef.current || result) return;
       toast.error('انتهى الوقت!');
       await submit(-1);
     };
@@ -122,17 +138,24 @@ export default function QuizUI({
 
   const handleNext = () => {
     if (currentStep >= QUIZ_TOTAL_STEPS) {
-      sessionStorage.removeItem('dbq_session_step');
-      sessionStorage.removeItem('dbq_session_series');
+      // Clean up session keys on completion
+      sessionStorage.removeItem(DBQ_SESSION_STEP_KEY);
+      sessionStorage.removeItem(DBQ_SESSION_SERIES_KEY);
+      sessionStorage.removeItem(DBQ_SESSION_STARTED_AT_KEY);
       router.push('/quiz/leaderboard');
     } else {
-      sessionStorage.setItem('dbq_session_step', (currentStep + 1).toString());
-      router.refresh();
-      // Reset local state for "new" question feel while server sends new data
+      const nextStep = currentStep + 1;
+      sessionStorage.setItem(DBQ_SESSION_STEP_KEY, nextStep.toString());
+      
+      // Reset local state for "new" question feel
       setResult(null);
       setSelectedIdx(null);
       setTimeLeft(durationSeconds);
+      setWarmupDone(false);
       hasSubmittedRef.current = false;
+
+      // Navigate to fresh question deterministically
+      router.push(`/quiz/${question.series_slug}?q=${Date.now()}`);
     }
   };
 
@@ -141,7 +164,8 @@ export default function QuizUI({
   return (
     <div className="relative">
       <QuizWarmupOverlay 
-        open={!warmupDone} 
+        key={`warmup-${question.id}`}
+        open={!warmupDone && !result} 
         seconds={QUIZ_WARMUP_SECONDS} 
         onComplete={() => setWarmupDone(true)} 
       />
@@ -161,7 +185,7 @@ export default function QuizUI({
         <AnimatePresence mode="wait">
           {!result ? (
             <motion.div 
-              key="question"
+              key={`q-${question.id}`}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
@@ -204,7 +228,7 @@ export default function QuizUI({
                       onClick={() => submit(idx)}
                       className={cn(
                         "w-full text-right p-4 sm:p-5 rounded-2xl border-2 transition-all font-bold text-lg group relative overflow-hidden",
-                        !isSelected && "border-slate-800 bg-slate-900/50 hover:bg-slate-800 text-slate-300 hover:border-slate-600 active:scale-[0.99]",
+                        !isSelected && "border-slate-800 bg-slate-900/50 hover:bg-slate-800 text-slate-300 hover:border-slate-600 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed",
                         isSelected && "border-orange-500 bg-orange-500/10 text-orange-400 ring-4 ring-orange-500/20"
                       )}
                     >
@@ -225,7 +249,12 @@ export default function QuizUI({
               newPowerLevel={result.newPowerLevel}
               newStreak={result.newStreak}
               onNext={handleNext}
-              onExit={() => router.push('/series')}
+              onExit={() => {
+                sessionStorage.removeItem(DBQ_SESSION_STEP_KEY);
+                sessionStorage.removeItem(DBQ_SESSION_SERIES_KEY);
+                sessionStorage.removeItem(DBQ_SESSION_STARTED_AT_KEY);
+                router.push('/series');
+              }}
               nextLabel={currentStep >= QUIZ_TOTAL_STEPS ? "إنهاء الجولة" : "السؤال التالي"}
             />
           )}
@@ -233,8 +262,4 @@ export default function QuizUI({
       </div>
     </div>
   );
-}
-
-function formatNumber(num: number) {
-  return new Intl.NumberFormat('en-US').format(num);
 }

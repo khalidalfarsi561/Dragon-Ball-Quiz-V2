@@ -7,9 +7,6 @@ import crypto from 'crypto';
 import QuizUI from '@/components/QuizUI';
 import { UserRecord } from '@/lib/types';
 
-import QuizSessionHeader from '@/components/quiz/QuizSessionHeader';
-import { QUIZ_TOTAL_STEPS } from '@/lib/ux';
-
 export default async function QuizPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
   const pb = await getPbServerClient();

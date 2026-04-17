@@ -8,7 +8,7 @@ export default function QuizCard({ series }: { series: SeriesConfig }) {
   return (
     <Link 
       href={`/series/${series.slug}`}
-      className="group relative flex flex-col h-full bg-slate-900 border border-slate-800 hover:border-orange-500/50 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(249,115,22,0.1)] hover:-translate-y-1"
+      className="group relative flex flex-col h-full bg-slate-900 border border-slate-800 hover:border-orange-500/50 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(249,115,22,0.15)] hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
     >
       <div className="relative h-48 w-full overflow-hidden bg-slate-800">
         <Image 

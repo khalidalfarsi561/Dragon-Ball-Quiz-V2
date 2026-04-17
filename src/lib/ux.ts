@@ -7,6 +7,11 @@ export const QUIZ_TOTAL_STEPS = 10;
 export const QUIZ_WARMUP_SECONDS = 3;
 export const FIRST_QUESTION_NO_TIMER = true;
 
+// Session Storage Keys
+export const DBQ_SESSION_SERIES_KEY = 'dbq_session_series';
+export const DBQ_SESSION_STEP_KEY = 'dbq_session_step';
+export const DBQ_SESSION_STARTED_AT_KEY = 'dbq_session_started_at';
+
 export const getQuizProgressLabel = (currentStep: number, totalSteps: number) => {
   return `السؤال ${currentStep} من ${totalSteps}`;
 };

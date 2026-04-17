@@ -35,16 +35,16 @@ export default async function LeaderboardServer() {
     }
   }
 
-  // Determine current user rank and next rank
-  let userRank: number | null = null;
+  // Determine current user rank and next rank insight
+  let currentUserRank: number | null = null;
   let nextRankScore: number | null = null;
-  let userScore: number | null = null;
+  let currentUserScore: number | null = null;
 
   if (currentUser) {
     const userIndex = leaderboard.findIndex(entry => entry.user === currentUser.id);
     if (userIndex !== -1) {
-      userRank = userIndex + 1;
-      userScore = leaderboard[userIndex].score;
+      currentUserRank = userIndex + 1;
+      currentUserScore = leaderboard[userIndex].score;
       if (userIndex > 0) {
         nextRankScore = leaderboard[userIndex - 1].score;
       }
@@ -63,8 +63,8 @@ export default async function LeaderboardServer() {
   return (
     <div className="space-y-4">
       <LeaderboardInsight 
-        currentUserRank={userRank}
-        currentUserScore={userScore}
+        currentUserRank={currentUserRank}
+        currentUserScore={currentUserScore}
         nextRankScore={nextRankScore}
       />
 

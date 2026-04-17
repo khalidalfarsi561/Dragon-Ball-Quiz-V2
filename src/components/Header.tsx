@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getPbServerClient } from '@/lib/pocketbase';
-import UserAvatar from './UserAvatar';
+import HeaderNavLinks from './header/HeaderNavLinks';
 
 export default async function Header() {
   const pb = await getPbServerClient();
@@ -13,22 +13,7 @@ export default async function Header() {
         <Link href="/" className="font-display font-bold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-500 hover:scale-105 transition-transform">
           DBQ
         </Link>
-        <nav className="flex items-center gap-4 sm:gap-6 text-sm font-medium">
-          {isLoggedIn ? (
-            <>
-              <Link href="/series" className="text-slate-300 hover:text-white transition-colors">السلاسل</Link>
-              <Link href="/quiz/leaderboard" className="text-slate-300 hover:text-white transition-colors">الترتيب</Link>
-              <Link href="/profile" className="flex items-center gap-2 group">
-                <UserAvatar src={user?.avatar_url} alt={user?.display_name || user?.username} size={32} />
-                <span className="hidden sm:inline-block text-slate-300 group-hover:text-white transition-colors">قاعدتي</span>
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link href="/quiz/leaderboard" className="text-slate-300 hover:text-white transition-colors">الترتيب</Link>
-            </>
-          )}
-        </nav>
+        <HeaderNavLinks isLoggedIn={isLoggedIn} user={user} />
       </div>
     </header>
   );
