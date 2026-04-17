@@ -27,6 +27,7 @@ export interface QuestionRecord {
   correct_answer: number;
   difficulty_tier: number;
   explanation: string;
+  hint?: string;
   series_slug: string;
 }
 
@@ -41,7 +42,7 @@ export interface LeaderboardRecord {
   }
 }
 
-export type Difficulty = 'easy' | 'medium' | 'hard';
+export type Difficulty = 'easy' | 'medium' | 'hard' | 'legendary';
 
 export interface SeriesConfig {
   id: string;

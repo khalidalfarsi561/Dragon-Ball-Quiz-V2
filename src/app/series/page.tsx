@@ -10,6 +10,7 @@ export const metadata = {
 import SectionIntro from '@/components/ui/SectionIntro';
 import InfoNotice from '@/components/ui/InfoNotice';
 import DifficultyQuickSelect from '@/components/DifficultyQuickSelect';
+import DailyChallenge from '@/components/DailyChallenge';
 
 export default async function SeriesPage() {
   const pb = await getPbServerClient();
@@ -19,13 +20,15 @@ export default async function SeriesPage() {
   }
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-500">
+    <div className="space-y-16 animate-in fade-in duration-500">
       <SectionIntro 
         title="اختر التحدي"
         subtitle="أي جزء من القصة تريد اختباره؟ اختر السلسلة أو مستوى الصعوبة وابدأ رفع مستوى طاقتك."
         eyebrow="رحلة المقاتل"
       />
       
+      <DailyChallenge />
+
       <div className="space-y-6">
         <h2 className="text-xl font-black font-display text-white pr-4 border-r-4 border-orange-500">بداية سريعة حسب الصعوبة</h2>
         <DifficultyQuickSelect />

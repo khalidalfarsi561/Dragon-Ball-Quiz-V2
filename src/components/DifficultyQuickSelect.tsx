@@ -8,6 +8,7 @@ const DIFFICULTIES = [
   { level: 'easy', label: 'مستوى سهل', sub: 'Dragon Ball (كلاسيك)', href: '/series/dragon-ball', color: 'bg-green-500', icon: Star },
   { level: 'medium', label: 'مستوى متوسط', sub: 'Dragon Ball Z', href: '/series/dragon-ball-z', color: 'bg-orange-500', icon: Zap },
   { level: 'hard', label: 'مستوى صعب', sub: 'Dragon Ball Super', href: '/series/dragon-ball-super', color: 'bg-red-600', icon: Target },
+  { level: 'legendary', label: 'مستوى أسطوري', sub: 'Dragon Ball Movies', href: '/series/dragon-ball-movies', color: 'bg-purple-600', icon: Zap },
 ];
 
 export default function DifficultyQuickSelect() {

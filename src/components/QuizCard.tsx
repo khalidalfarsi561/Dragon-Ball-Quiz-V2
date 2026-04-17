@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { SeriesConfig } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Play } from 'lucide-react';
+import { audioController } from '@/lib/audio';
 
 export default function QuizCard({ series }: { series: SeriesConfig }) {
   return (
@@ -34,10 +35,12 @@ export default function QuizCard({ series }: { series: SeriesConfig }) {
               series.difficulty === 'easy' && "bg-green-500/10 text-green-400 border-green-500/20",
               series.difficulty === 'medium' && "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
               series.difficulty === 'hard' && "bg-red-500/10 text-red-400 border-red-500/20",
+              series.difficulty === 'legendary' && "bg-purple-500/10 text-purple-400 border-purple-500/20 animate-pulse ring-1 ring-purple-500/50",
             )}>
               {series.difficulty === 'easy' && 'سهل'}
               {series.difficulty === 'medium' && 'متوسط'}
               {series.difficulty === 'hard' && 'صعب'}
+              {series.difficulty === 'legendary' && 'أسطوري'}
             </span>
           </div>
           <h2 className="text-2xl font-black text-white font-display leading-tight drop-shadow-md">{series.title}</h2>
@@ -50,7 +53,10 @@ export default function QuizCard({ series }: { series: SeriesConfig }) {
         </p>
         
         <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-800/50">
-          <div className="flex items-center text-orange-500 font-black text-sm group-hover:text-orange-400 transition-all gap-3 group/link">
+          <div 
+            onClick={() => audioController.play('click')}
+            className="flex items-center text-orange-500 font-black text-sm group-hover:text-orange-400 transition-all gap-3 group/link"
+          >
             <span className="relative overflow-hidden">
               <span className="block group-hover/link:-translate-y-full transition-transform duration-300">التفاصيل وبدء الاختبار</span>
               <span className="absolute inset-0 block translate-y-full group-hover/link:translate-y-0 transition-transform duration-300 text-white">اتخاذ القرار الآن!</span>

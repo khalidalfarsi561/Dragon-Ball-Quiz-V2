@@ -40,6 +40,16 @@ export const SERIES: SeriesConfig[] = [
     color: 'from-red-600 to-orange-600',
     questionCount: 30,
     difficulty: 'medium',
+  },
+  {
+    id: 'db-movies',
+    slug: 'dragon-ball-movies',
+    title: 'أفلام دراغون بول',
+    subtitle: 'أقوى الخصوم والتحولات الأسطورية',
+    image: 'https://picsum.photos/seed/dragonballmovies/600/400',
+    color: 'from-purple-600 via-pink-600 to-red-600',
+    questionCount: 40,
+    difficulty: 'legendary',
   }
 ];
 

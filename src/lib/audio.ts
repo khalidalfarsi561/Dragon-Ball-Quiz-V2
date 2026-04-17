@@ -9,6 +9,8 @@ const SOUND_URLS = {
   incorrect: 'https://cdn.pixabay.com/audio/2021/08/04/audio_c3614a9388.mp3', // Simple error thud
   tick: 'https://cdn.pixabay.com/audio/2022/03/10/audio_f5238206d2.mp3', // Quiet tick
   levelUp: 'https://cdn.pixabay.com/audio/2021/08/04/audio_06256f6874.mp3', // Level up fanfare
+  click: 'https://cdn.pixabay.com/audio/2022/03/10/audio_f68f86f73e.mp3', // Short UI click
+  submit: 'https://cdn.pixabay.com/audio/2021/08/04/audio_0de8c75e83.mp3', // Energy surge for submissions
 };
 
 type SoundType = keyof typeof SOUND_URLS;

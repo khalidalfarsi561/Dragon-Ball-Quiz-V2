@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Play } from 'lucide-react';
+import { audioController } from '@/lib/audio';
 
 export async function generateStaticParams() {
   return SERIES.map((s) => ({ slug: s.slug }));
@@ -60,10 +61,12 @@ export default async function SeriesDetailPage(props: { params: Promise<{ slug: 
                 series.difficulty === 'easy' && "text-green-400 border-green-500/30",
                 series.difficulty === 'medium' && "text-yellow-400 border-yellow-500/30",
                 series.difficulty === 'hard' && "text-red-400 border-red-500/30",
+                series.difficulty === 'legendary' && "text-purple-400 border-purple-500/30 animate-pulse ring-1 ring-purple-500/50",
               )}>
                 الصعوبة: {series.difficulty === 'easy' && 'سهلة جداً'}
                 {series.difficulty === 'medium' && 'متوسطة'}
                 {series.difficulty === 'hard' && 'أسطورية صعبة'}
+                {series.difficulty === 'legendary' && 'مستوى الآلهة'}
               </span>
             </div>
             <h1 className="text-4xl sm:text-5xl font-black text-white font-display mb-2 drop-shadow-md">
@@ -76,6 +79,7 @@ export default async function SeriesDetailPage(props: { params: Promise<{ slug: 
           
           <Link 
             href={`/quiz/${series.slug}`}
+            onClick={() => audioController.play('submit')}
             className="shrink-0 flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-400 hover:to-yellow-400 text-slate-950 font-black px-8 py-4 rounded-xl transition-all shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:scale-105"
           >
             <Play fill="currentColor" size={20} />

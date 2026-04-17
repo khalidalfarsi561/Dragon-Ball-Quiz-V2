@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { submitAnswer } from '@/actions/quiz';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Star } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
@@ -61,6 +61,7 @@ export default function QuizUI({
   const [timeLeft, setTimeLeft] = useState(durationSeconds);
   const [warmupDone, setWarmupDone] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [hintVisible, setHintVisible] = useState(false);
   const hasSubmittedRef = useRef(false);
   const router = useRouter();
 
@@ -94,6 +95,7 @@ export default function QuizUI({
     
     setIsSubmitting(true);
     setSelectedIdx(index);
+    audioController.play('submit');
     try {
       const res = await submitAnswer(token, index) as QuizSubmitResponse;
       if ('error' in res) {
@@ -148,6 +150,7 @@ export default function QuizUI({
   }, [warmupDone, timeLeft, result, currentStep, submit]);
 
   const handleNext = () => {
+    audioController.play('click');
     if (currentStep >= QUIZ_TOTAL_STEPS) {
       audioController.play('levelUp');
       // Clean up session keys on completion
@@ -240,17 +243,48 @@ export default function QuizUI({
               )}
 
               <div className="flex justify-between items-center">
-                <span className="bg-slate-800 text-slate-400 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border border-slate-700">
-                  المستوى {question.difficulty_tier}
-                </span>
+                <div className="flex items-center gap-3">
+                  <span className="bg-slate-800 text-slate-400 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border border-slate-700">
+                    المستوى {question.difficulty_tier}
+                  </span>
+                  {question.hint && !hintVisible && (
+                    <button 
+                      onClick={() => {
+                        audioController.play('click');
+                        setHintVisible(true);
+                      }}
+                      className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border border-orange-500/30 text-orange-500 hover:bg-orange-500 hover:text-white transition-all"
+                    >
+                      تلميح (100 PL)
+                    </button>
+                  )}
+                </div>
                 {!timerEnabled && (
                   <span className="text-xs font-bold text-slate-500">الجولة الأولى: لا يوجد وقت</span>
                 )}
               </div>
               
-              <h2 className="text-2xl sm:text-3xl font-display font-bold text-white leading-relaxed text-right">
-                {question.content}
-              </h2>
+              <div className="space-y-4">
+                <h2 className="text-2xl sm:text-3xl font-display font-bold text-white leading-relaxed text-right">
+                  {question.content}
+                </h2>
+
+                <AnimatePresence>
+                  {hintVisible && question.hint && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="bg-orange-500/5 border border-orange-500/20 rounded-2xl p-4 text-orange-400 text-sm font-medium text-right relative overflow-hidden"
+                    >
+                      <div className="absolute top-0 right-0 p-2 opacity-10">
+                        <Star size={24} className="fill-current" />
+                      </div>
+                      <span className="relative z-10">مساعدة من الكايو: {question.hint}</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
               <div className="space-y-4">
                 {question.options.map((opt, idx) => {
@@ -259,7 +293,10 @@ export default function QuizUI({
                     <button
                       key={idx}
                       disabled={isSubmitting || !warmupDone}
-                      onClick={() => submit(idx)}
+                      onClick={() => {
+                        audioController.play('click');
+                        submit(idx);
+                      }}
                       className={cn(
                         "w-full text-right p-4 sm:p-5 rounded-2xl border-2 transition-all font-bold text-lg group relative overflow-hidden",
                         !isSelected && "border-slate-800 bg-slate-900/50 hover:bg-slate-800 text-slate-300 hover:border-slate-600 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed",

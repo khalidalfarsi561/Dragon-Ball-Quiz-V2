@@ -60,6 +60,7 @@ export default function HeaderNavLinks({ isLoggedIn, user }: HeaderNavLinksProps
           <Link 
             key={link.href} 
             href={link.href} 
+            onClick={() => audioController.play('click')}
             className={cn(
               "transition-all duration-300 relative py-1 px-2 rounded-lg hover:bg-white/5 group",
               isActive 
@@ -81,7 +82,10 @@ export default function HeaderNavLinks({ isLoggedIn, user }: HeaderNavLinksProps
       })}
       
       {isLoggedIn && (
-        <Link href="/profile" className={cn(
+        <Link 
+          href="/profile" 
+          onClick={() => audioController.play('click')}
+          className={cn(
           "flex items-center gap-2 group transition-all relative py-1 px-1",
           pathname === '/profile' ? "text-white" : "text-slate-400 hover:text-slate-200"
         )}>
