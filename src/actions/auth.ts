@@ -3,6 +3,7 @@
 import { getPbServerClient, setServerAuthCookie } from '@/lib/pocketbase';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 const authSchema = z.object({
   email: z.string().email('البريد الإلكتروني غير صالح'),
@@ -23,10 +24,11 @@ export async function loginAction(formData: FormData) {
     await pb.collection('users').authWithPassword(parsed.data.email, parsed.data.password);
     await setServerAuthCookie(pb);
     revalidatePath('/', 'layout');
-    return { success: true };
   } catch (error: any) {
     return { error: 'بيانات الدخول غير صحيحة' };
   }
+
+  redirect('/series');
 }
 
 export async function signupAction(formData: FormData) {
@@ -65,10 +67,11 @@ export async function signupAction(formData: FormData) {
     await pb.collection('users').authWithPassword(parsed.data.email, parsed.data.password);
     await setServerAuthCookie(pb);
     revalidatePath('/', 'layout');
-    return { success: true };
   } catch (error: any) {
     return { error: 'حدث خطأ أثناء التسجيل. قد يكون البريد مستخدماً.' };
   }
+
+  redirect('/series');
 }
 
 export async function logoutAction() {
@@ -76,4 +79,5 @@ export async function logoutAction() {
   pb.authStore.clear();
   await setServerAuthCookie(pb);
   revalidatePath('/', 'layout');
+  redirect('/');
 }

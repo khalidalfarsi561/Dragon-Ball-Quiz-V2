@@ -44,7 +44,14 @@ function AchievementCard({ achievement, index }: { achievement: Achievement; ind
           {achievement.unlocked ? <Award size={24} /> : <Lock size={24} />}
         </div>
         <div className="space-y-1">
-          <h4 className="font-bold text-slate-100">{achievement.label}</h4>
+          <div className="flex items-center gap-2">
+            <h4 className="font-bold text-slate-100">{achievement.label}</h4>
+            {achievement.unlocked ? (
+              <Award size={14} className="text-orange-400" />
+            ) : (
+              <Lock size={14} className="text-slate-500" />
+            )}
+          </div>
           <p className="text-xs text-slate-400 font-medium leading-relaxed">
             {achievement.description}
           </p>

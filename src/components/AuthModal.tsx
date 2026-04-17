@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
 import { loginAction, signupAction } from '@/actions/auth';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
@@ -9,24 +8,43 @@ import { Loader2 } from 'lucide-react';
 export default function AuthModal() {
   const [isLogin, setIsLogin] = useState(true);
   const [pending, setPending] = useState(false);
-  const router = useRouter();
+  const [isTransitioning, startTransition] = useTransition();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setPending(true);
     
     const formData = new FormData(e.currentTarget);
-    const result = isLogin ? await loginAction(formData) : await signupAction(formData);
     
-    setPending(false);
+    startTransition(async () => {
+      try {
+        const result = isLogin ? await loginAction(formData) : await signupAction(formData);
+        
+        if (result?.error) {
+          toast.error(result.error);
+          setPending(false);
+        }
+      } catch (err: any) {
+        // In Next.js, redirects throw a special error that should not be caught as a failure.
+        // We check for the 'digest' property which is often present on Next.js internal errors,
+        // or specifically handle the known redirect messages.
+        const isRedirect = 
+          err?.message === 'NEXT_REDIRECT' || 
+          (err?.digest && err.digest.includes('NEXT_REDIRECT')) ||
+          err?.message?.includes('unexpected response'); // Sometimes surfaced when redirect is interrupted
 
-    if (result.error) {
-      toast.error(result.error);
-    } else if (result.success) {
-      toast.success(isLogin ? 'تم تسجيل الدخول بنجاح!' : 'تم إنشاء الحساب بنجاح!');
-      router.push('/series');
-    }
+        if (!isRedirect) {
+          console.error('Auth action failed:', err);
+          toast.error('حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.');
+          setPending(false);
+        }
+        // If it is a redirect, we don't clear pending because the page is navigating.
+      }
+    });
   }
+
+  // The final pending state is a combination of local state and transition state
+  const isActionPending = pending || isTransitioning;
 
   return (
     <div className="space-y-6">
@@ -65,10 +83,10 @@ export default function AuthModal() {
         
         <button 
           type="submit" 
-          disabled={pending}
+          disabled={isActionPending}
           className="w-full bg-gradient-to-r from-orange-500 to-yellow-600 hover:from-orange-600 hover:to-yellow-700 text-white font-bold py-2.5 rounded-lg transition-all shadow-lg shadow-orange-900/30 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          {pending && <Loader2 className="animate-spin" size={18} />}
+          {isActionPending && <Loader2 className="animate-spin" size={18} />}
           <span>{isLogin ? 'ابدأ التحدي' : 'انضم الآن'}</span>
         </button>
       </form>

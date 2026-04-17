@@ -71,43 +71,43 @@ export default async function SeriesDetailPage(props: { params: Promise<{ slug: 
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8">
-          <h2 className="text-xl font-bold font-display text-white mb-4">قواعد التحدي</h2>
-          <ul className="space-y-3 text-slate-300">
-            <li className="flex gap-3">
-              <span className="text-orange-500 font-bold">•</span>
-              <span>كل إجابة صحيحة تزيد من مستوى طاقتك!</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 lg:p-10 shadow-xl space-y-6">
+          <h2 className="text-2xl font-black font-display text-white border-b border-slate-800 pb-4">قواعد التحدي</h2>
+          <ul className="space-y-4 text-slate-300">
+            <li className="flex gap-4 items-start">
+              <span className="w-2 h-2 rounded-full bg-orange-500 mt-2 shrink-0 shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
+              <span className="leading-relaxed">كل إجابة صحيحة تزيد من مستوى طاقتك!</span>
             </li>
-            <li className="flex gap-3">
-              <span className="text-orange-500 font-bold">•</span>
-              <span>الإجابات المتتالية الصحيحة (Streak) تمنحك مضاعف نقاط.</span>
+            <li className="flex gap-4 items-start">
+              <span className="w-2 h-2 rounded-full bg-orange-500 mt-2 shrink-0 shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
+              <span className="leading-relaxed">الإجابات المتتالية الصحيحة (Streak) تمنحك مضاعف نقاط.</span>
             </li>
-            <li className="flex gap-3">
-              <span className="text-orange-500 font-bold">•</span>
-              <span>احذر! الإجابة الخاطئة ستفقدك جزءاً من طاقتك.</span>
+            <li className="flex gap-4 items-start">
+              <span className="w-2 h-2 rounded-full bg-orange-500 mt-2 shrink-0 shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
+              <span className="leading-relaxed">احذر! الإجابة الخاطئة ستفقدك جزءاً من طاقتك.</span>
             </li>
-            <li className="flex gap-3">
-              <span className="text-orange-500 font-bold">•</span>
-              <span>لديك وقت محدد لكل سؤال، السرعة تلعب دوراً.</span>
+            <li className="flex gap-4 items-start">
+              <span className="w-2 h-2 rounded-full bg-orange-500 mt-2 shrink-0 shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
+              <span className="leading-relaxed">لديك وقت محدد لكل سؤال، السرعة تلعب دوراً كبيراً.</span>
             </li>
           </ul>
         </div>
 
-        <div className="bg-orange-500/5 border border-orange-500/10 rounded-2xl p-6 sm:p-8">
-          <h2 className="text-xl font-bold font-display text-orange-400 mb-4">ماذا ينتظرك؟</h2>
-          <ul className="space-y-4 text-slate-300 text-sm">
-            <li className="flex gap-3">
-              <span className="shrink-0 w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-xs">1</span>
-              <span>سيبدأ التحدي بعد عد تنازلي قصير للاستعداد.</span>
+        <div className="bg-orange-500/5 border border-orange-500/10 rounded-3xl p-8 lg:p-10 shadow-xl space-y-6">
+          <h2 className="text-2xl font-black font-display text-orange-400 border-b border-orange-500/10 pb-4">ماذا ينتظرك؟</h2>
+          <ul className="space-y-6 text-slate-300">
+            <li className="flex gap-4 items-start">
+              <span className="shrink-0 w-8 h-8 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center font-black text-sm border border-orange-500/20">1</span>
+              <span className="leading-relaxed">سيبدأ التحدي بعد عد تنازلي قصير للاستعداد والتركيز.</span>
             </li>
-            <li className="flex gap-3">
-              <span className="shrink-0 w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-xs">2</span>
-              <span>سترى تقدمك في كل سؤال حتى تنهي الجولة.</span>
+            <li className="flex gap-4 items-start">
+              <span className="shrink-0 w-8 h-8 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center font-black text-sm border border-orange-500/20">2</span>
+              <span className="leading-relaxed">سترى تقدمك في كل سؤال حتى تنهي الجولة الكاملة من التحدي.</span>
             </li>
-            <li className="flex gap-3">
-              <span className="shrink-0 w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-xs">3</span>
-              <span>بعد كل إجابة، ستحصل على شرح مفصل وتحديث لحظي لترتيبك.</span>
+            <li className="flex gap-4 items-start">
+              <span className="shrink-0 w-8 h-8 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center font-black text-sm border border-orange-500/20">3</span>
+              <span className="leading-relaxed">بعد كل إجابة، ستحصل على شرح مفصل وتحديث لحظي لترتيبك في لوحة الشرف.</span>
             </li>
           </ul>
         </div>

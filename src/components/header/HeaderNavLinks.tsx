@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import UserAvatar from '../UserAvatar';
 import { UserRecord } from '@/lib/types';
+import { motion } from 'motion/react';
 
 interface HeaderNavLinksProps {
   isLoggedIn: boolean;
@@ -32,15 +33,18 @@ export default function HeaderNavLinks({ isLoggedIn, user }: HeaderNavLinksProps
             key={link.href} 
             href={link.href} 
             className={cn(
-              "transition-all duration-200 relative py-1",
+              "transition-all duration-300 relative py-1 px-1",
               isActive 
-                ? "text-orange-400 font-bold" 
-                : "text-slate-300 hover:text-white"
+                ? "text-white font-black drop-shadow-[0_0_8px_rgba(249,115,22,0.5)]" 
+                : "text-slate-400 hover:text-slate-200"
             )}
           >
             {link.label}
             {isActive && (
-              <span className="absolute -bottom-1 inset-x-0 h-0.5 bg-orange-500 rounded-full" />
+              <motion.span 
+                layoutId="nav-underline"
+                className="absolute -bottom-1 inset-x-0 h-0.5 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full" 
+              />
             )}
           </Link>
         );
@@ -48,14 +52,25 @@ export default function HeaderNavLinks({ isLoggedIn, user }: HeaderNavLinksProps
       
       {isLoggedIn && (
         <Link href="/profile" className={cn(
-          "flex items-center gap-2 group transition-all",
-          pathname === '/profile' ? "text-orange-400" : "text-slate-300"
+          "flex items-center gap-2 group transition-all relative py-1 px-1",
+          pathname === '/profile' ? "text-white" : "text-slate-400 hover:text-slate-200"
         )}>
-          <UserAvatar src={user?.avatar_url} alt={user?.display_name || user?.username} size={32} />
+          <div className={cn(
+            "rounded-full p-0.5 transition-all",
+            pathname === '/profile' ? "bg-gradient-to-r from-orange-500 to-yellow-500" : "bg-transparent"
+          )}>
+            <UserAvatar src={user?.avatar_url} alt={user?.display_name || user?.username} size={28} />
+          </div>
           <span className={cn(
-            "hidden sm:inline-block transition-colors group-hover:text-white",
-            pathname === '/profile' && "font-bold text-orange-400"
+            "hidden sm:inline-block transition-all",
+            pathname === '/profile' && "font-black drop-shadow-[0_0_8px_rgba(249,115,22,0.5)]"
           )}>قاعدتي</span>
+          {pathname === '/profile' && (
+            <motion.span 
+              layoutId="nav-underline"
+              className="absolute -bottom-1 inset-x-0 h-0.5 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full" 
+            />
+          )}
         </Link>
       )}
     </nav>

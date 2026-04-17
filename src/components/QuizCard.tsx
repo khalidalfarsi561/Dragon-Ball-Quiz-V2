@@ -8,14 +8,14 @@ export default function QuizCard({ series }: { series: SeriesConfig }) {
   return (
     <Link 
       href={`/series/${series.slug}`}
-      className="group relative flex flex-col h-full bg-slate-900 border border-slate-800 hover:border-orange-500/50 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(249,115,22,0.15)] hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+      className="group relative flex flex-col h-full bg-slate-900 border border-slate-800 hover:border-orange-500/50 rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-[0_20px_40px_rgba(249,115,22,0.15)] hover:-translate-y-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-500/50 focus-visible:ring-offset-4 focus-visible:ring-offset-slate-950 scale-100 hover:scale-[1.02] active:scale-[0.98]"
     >
       <div className="relative h-48 w-full overflow-hidden bg-slate-800">
         <Image 
           src={series.image}
           alt={series.title}
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover transition-transform duration-700 group-hover:scale-110"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           referrerPolicy="no-referrer"
         />
@@ -23,12 +23,12 @@ export default function QuizCard({ series }: { series: SeriesConfig }) {
         
         <div className="absolute inset-x-0 bottom-0 p-4">
           <span className={cn(
-            "inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wider mb-2 text-white bg-gradient-to-r",
+            "inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wider mb-2 text-white bg-gradient-to-r shadow-lg shadow-black/20",
             series.color
           )}>
             {series.questionCount} سؤال
           </span>
-          <h2 className="text-2xl font-black text-white font-display leading-tight">{series.title}</h2>
+          <h2 className="text-2xl font-black text-white font-display leading-tight drop-shadow-md">{series.title}</h2>
         </div>
       </div>
       
@@ -37,9 +37,13 @@ export default function QuizCard({ series }: { series: SeriesConfig }) {
           {series.subtitle}
         </p>
         
-        <div className="mt-auto flex items-center text-orange-500 font-bold text-sm group-hover:text-orange-400 transition-colors">
-          <span>التفاصيل وبدء الاختبار</span>
-          <Play size={16} className="mr-1.5 fill-current" />
+        <div className="mt-auto flex items-center justify-between">
+          <div className="flex items-center text-orange-500 font-bold text-sm group-hover:text-orange-400 transition-colors gap-2">
+            <span className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-orange-500 after:transition-all group-hover:after:w-full">التفاصيل وبدء الاختبار</span>
+            <div className="p-1.5 rounded-full bg-orange-500/10 group-hover:bg-orange-500 group-hover:text-slate-950 transition-all">
+              <Play size={14} className="fill-current" />
+            </div>
+          </div>
         </div>
       </div>
     </Link>

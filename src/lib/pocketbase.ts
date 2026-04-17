@@ -31,6 +31,9 @@ export async function getPbServerClient() {
       // Opt out of refresh if you just want to trust the token silently to save cost,
       // but usually we refresh to get the latest user model state.
       await pb.collection('users').authRefresh();
+      // NOTE: We do NOT call setServerAuthCookie(pb) here because getPbServerClient 
+      // is often used in Server Components where setting cookies is not allowed.
+      // Cookies are only updated during explicit Server Actions (login/signup/profile).
     }
   } catch (_) {
     pb.authStore.clear();
