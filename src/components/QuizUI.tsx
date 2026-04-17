@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { submitAnswer } from '@/actions/quiz';
 import { toast } from 'sonner';
 import { CheckCircle2, XCircle, ArrowLeft, Loader2 } from 'lucide-react';
@@ -27,20 +27,26 @@ export default function QuizUI({ question, token, durationSeconds, initialPowerL
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [timeLeft, setTimeLeft] = useState(durationSeconds);
+  const hasSubmittedRef = useRef(false);
   const router = useRouter();
   
   const submit = async (index: number) => {
+    if (hasSubmittedRef.current) return;
+    hasSubmittedRef.current = true;
+    
     setIsSubmitting(true);
     setSelectedIdx(index);
     try {
       const res = await submitAnswer(token, index);
       if (res.error) {
         toast.error(res.error);
+        hasSubmittedRef.current = false; // Allow retry on fatal network/server error without locking forever
       } else {
         setResult(res);
       }
     } catch {
       toast.error('حدث رمز خطأ غير معروف');
+      hasSubmittedRef.current = false;
     } finally {
       setIsSubmitting(false);
     }
@@ -50,7 +56,7 @@ export default function QuizUI({ question, token, durationSeconds, initialPowerL
     if (result || timeLeft <= 0) return;
     
     const handleTimeOut = async () => {
-      if (isSubmitting || result) return;
+      if (hasSubmittedRef.current) return;
       toast.error('انتهى الوقت!');
       await submit(-1);
     };

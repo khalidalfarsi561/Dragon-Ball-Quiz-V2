@@ -25,6 +25,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
         toast.error('حجم الصورة يجب أن لا يتجاوز 5 ميجابايت');
+        e.target.value = '';
         return;
       }
       const reader = new FileReader();

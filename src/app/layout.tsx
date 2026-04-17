@@ -4,6 +4,7 @@ import './globals.css';
 import { Toaster } from 'sonner';
 import { ReactNode } from 'react';
 import Header from '@/components/Header';
+import { siteUrl } from '@/lib/env';
 
 const tajawal = Tajawal({
   subsets: ['arabic', 'latin'],
@@ -16,9 +17,6 @@ const cairo = Cairo({
   weight: ['400', '600', '700', '900'],
   variable: '--font-cairo',
 });
-
-// Avoid using localhost fallback in shipped metadata logic
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

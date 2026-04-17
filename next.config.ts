@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
       allowedOrigins: [
         'localhost:3000',
         '*.run.app',
+        '*.aistudio.google',
+        '*.google.com',
+        '*.europe-west2.run.app',
+        '*.*.run.app',
         process.env.NEXT_PUBLIC_SITE_URL ? process.env.NEXT_PUBLIC_SITE_URL.replace(/^https?:\/\//, '') : ''
       ].filter(Boolean)
     }

@@ -2,9 +2,21 @@ import PocketBase from 'pocketbase';
 import { cookies } from 'next/headers';
 import { env } from './env';
 
+// Helper to attach ngrok bypass headers to PocketBase client
+function applyNgrokBypass(pb: PocketBase) {
+  pb.beforeSend = function (url, options) {
+    options.headers = Object.assign({}, options.headers, {
+      'ngrok-skip-browser-warning': 'true',
+    });
+    return { url, options };
+  };
+  return pb;
+}
+
 // Return a new client for server-side auth
 export async function getPbServerClient() {
   const pb = new PocketBase(env.POCKETBASE_URL);
+  applyNgrokBypass(pb);
   
   // Sync with next cookies
   const cookieStore = await cookies();
@@ -37,6 +49,7 @@ function isConnectionError(error: any) {
 // Return admin client for secure server-side operations
 export async function getPbAdminClient() {
   const pb = new PocketBase(env.POCKETBASE_URL);
+  applyNgrokBypass(pb);
   
   try {
     await pb.admins.authWithPassword(env.POCKETBASE_ADMIN_EMAIL, env.POCKETBASE_ADMIN_PASSWORD);

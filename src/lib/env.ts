@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-  NEXT_PUBLIC_SITE_URL: z.string().url().default('http://localhost:3000'),
+  NEXT_PUBLIC_SITE_URL: z.string().url().optional(),
   POCKETBASE_URL: z.string().url().default('http://localhost:8090'),
   POCKETBASE_ADMIN_EMAIL: z.string().email().default('admin@example.com'),
   POCKETBASE_ADMIN_PASSWORD: z.string().min(1).default('password'),
@@ -19,4 +19,9 @@ if (!_env.success) {
 
 export const env = _env.success ? _env.data : envSchema.parse({});
 
-export const siteUrl = env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '');
+const rawSiteUrl = env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || '';
+export const siteUrl = rawSiteUrl 
+  ? rawSiteUrl.replace(/\/$/, '') 
+  : (process.env.NODE_ENV === 'production' 
+      ? 'https://dragonball-quiz.com' 
+      : 'http://localhost:3000');
