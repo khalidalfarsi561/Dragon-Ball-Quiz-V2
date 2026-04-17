@@ -10,9 +10,11 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: {
-      allowedOrigins: process.env.NODE_ENV === 'development' 
-        ? ['localhost:3000']
-        : [process.env.NEXT_PUBLIC_SITE_URL?.replace(/^https?:\/\//, '') || 'localhost:3000']
+      allowedOrigins: [
+        'localhost:3000',
+        '*.run.app',
+        process.env.NEXT_PUBLIC_SITE_URL ? process.env.NEXT_PUBLIC_SITE_URL.replace(/^https?:\/\//, '') : ''
+      ].filter(Boolean)
     }
   },
   images: {
