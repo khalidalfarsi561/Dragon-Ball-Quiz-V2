@@ -37,11 +37,14 @@ export default function QuizCard({ series }: { series: SeriesConfig }) {
           {series.subtitle}
         </p>
         
-        <div className="mt-auto flex items-center justify-between">
-          <div className="flex items-center text-orange-500 font-bold text-sm group-hover:text-orange-400 transition-colors gap-2">
-            <span className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-orange-500 after:transition-all group-hover:after:w-full">التفاصيل وبدء الاختبار</span>
-            <div className="p-1.5 rounded-full bg-orange-500/10 group-hover:bg-orange-500 group-hover:text-slate-950 transition-all">
-              <Play size={14} className="fill-current" />
+        <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-800/50">
+          <div className="flex items-center text-orange-500 font-black text-sm group-hover:text-orange-400 transition-all gap-3 group/link">
+            <span className="relative overflow-hidden">
+              <span className="block group-hover/link:-translate-y-full transition-transform duration-300">التفاصيل وبدء الاختبار</span>
+              <span className="absolute inset-0 block translate-y-full group-hover/link:translate-y-0 transition-transform duration-300 text-white">اتخاذ القرار الآن!</span>
+            </span>
+            <div className="p-2 rounded-xl bg-orange-500/10 group-hover:bg-orange-500 group-hover:text-slate-950 transition-all shadow-[0_0_15px_rgba(249,115,22,0)] group-hover:shadow-[0_0_15px_rgba(249,115,22,0.4)] group-hover:scale-110">
+              <Play size={12} className="fill-current" />
             </div>
           </div>
         </div>

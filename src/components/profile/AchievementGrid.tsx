@@ -46,11 +46,20 @@ function AchievementCard({ achievement, index }: { achievement: Achievement; ind
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <h4 className="font-bold text-slate-100">{achievement.label}</h4>
-            {achievement.unlocked ? (
-              <Award size={14} className="text-orange-400" />
-            ) : (
-              <Lock size={14} className="text-slate-500" />
-            )}
+            <motion.div
+              initial={false}
+              animate={{ 
+                scale: achievement.unlocked ? [1, 1.2, 1] : 1,
+                rotate: achievement.unlocked ? [0, 10, -10, 0] : 0
+              }}
+              transition={{ duration: 0.5, repeat: achievement.unlocked ? Infinity : 0, repeatDelay: 5 }}
+            >
+              {achievement.unlocked ? (
+                <Award size={14} className="text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.5)]" />
+              ) : (
+                <Lock size={14} className="text-slate-600" />
+              )}
+            </motion.div>
           </div>
           <p className="text-xs text-slate-400 font-medium leading-relaxed">
             {achievement.description}

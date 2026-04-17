@@ -12,7 +12,10 @@ interface UserAvatarProps {
 export default function UserAvatar({ src, alt, size = 40, className }: UserAvatarProps) {
   return (
     <div 
-      className={cn("relative overflow-hidden rounded-full bg-slate-800 flex items-center justify-center border-2 border-slate-700 shrink-0", className)}
+      className={cn(
+        "relative overflow-hidden rounded-full bg-slate-800 flex items-center justify-center border-2 border-slate-700 shrink-0 transition-all duration-300 hover:border-orange-500/50 hover:scale-105 hover:shadow-[0_0_15px_rgba(249,115,22,0.3)]", 
+        className
+      )}
       style={{ width: size, height: size }}
     >
       {src ? (

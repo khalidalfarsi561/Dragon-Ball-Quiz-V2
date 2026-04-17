@@ -33,13 +33,15 @@ export default function HeaderNavLinks({ isLoggedIn, user }: HeaderNavLinksProps
             key={link.href} 
             href={link.href} 
             className={cn(
-              "transition-all duration-300 relative py-1 px-1",
+              "transition-all duration-300 relative py-1 px-2 rounded-lg hover:bg-white/5 group",
               isActive 
-                ? "text-white font-black drop-shadow-[0_0_8px_rgba(249,115,22,0.5)]" 
-                : "text-slate-400 hover:text-slate-200"
+                ? "text-white font-black drop-shadow-[0_0_8px_rgba(249,115,22,0.5)] bg-white/5" 
+                : "text-slate-400 hover:text-white"
             )}
           >
-            {link.label}
+            <span className="relative z-10 block group-hover:scale-110 transition-transform">
+              {link.label}
+            </span>
             {isActive && (
               <motion.span 
                 layoutId="nav-underline"
