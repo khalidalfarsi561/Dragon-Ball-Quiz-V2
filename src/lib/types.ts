@@ -41,6 +41,8 @@ export interface LeaderboardRecord {
   }
 }
 
+export type Difficulty = 'easy' | 'medium' | 'hard';
+
 export interface SeriesConfig {
   id: string;
   slug: string;
@@ -49,4 +51,5 @@ export interface SeriesConfig {
   image: string;
   color: string;
   questionCount: number;
+  difficulty: Difficulty;
 }

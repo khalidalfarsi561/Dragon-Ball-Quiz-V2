@@ -9,6 +9,7 @@ export const metadata = {
 
 import SectionIntro from '@/components/ui/SectionIntro';
 import InfoNotice from '@/components/ui/InfoNotice';
+import DifficultyQuickSelect from '@/components/DifficultyQuickSelect';
 
 export default async function SeriesPage() {
   const pb = await getPbServerClient();
@@ -18,18 +19,29 @@ export default async function SeriesPage() {
   }
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500">
+    <div className="space-y-12 animate-in fade-in duration-500">
       <SectionIntro 
         title="اختر التحدي"
-        subtitle="أي جزء من القصة تريد اختباره؟ اختر السلسلة وابدأ رفع مستوى طاقتك."
+        subtitle="أي جزء من القصة تريد اختباره؟ اختر السلسلة أو مستوى الصعوبة وابدأ رفع مستوى طاقتك."
         eyebrow="رحلة المقاتل"
       />
       
-      <InfoNotice tone="info" className="max-w-3xl">
-        ابدأ بالسلسلة التي تعرفها أكثر. كل إجابة صحيحة ترفع مستوى طاقتك وتقربك من تصدر لوحة الشرف العالمية!
-      </InfoNotice>
+      <div className="space-y-6">
+        <h2 className="text-xl font-black font-display text-white pr-4 border-r-4 border-orange-500">بداية سريعة حسب الصعوبة</h2>
+        <DifficultyQuickSelect />
+      </div>
 
-      <SeriesGrid />
+      <div className="h-px bg-slate-900" />
+
+      <div className="space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <h2 className="text-xl font-black font-display text-white pr-4 border-r-4 border-orange-500">تصفح كافة السلاسل</h2>
+          <InfoNotice tone="info" className="sm:max-w-xs">
+            كل إجابة صحيحة ترفع مستوى طاقتك!
+          </InfoNotice>
+        </div>
+        <SeriesGrid />
+      </div>
     </div>
   );
 }

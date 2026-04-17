@@ -9,6 +9,7 @@ export const SERIES: SeriesConfig[] = [
     image: 'https://picsum.photos/seed/dragonball/600/400',
     color: 'from-orange-500 to-yellow-500',
     questionCount: 50,
+    difficulty: 'easy',
   },
   {
     id: 'dbz',
@@ -18,6 +19,7 @@ export const SERIES: SeriesConfig[] = [
     image: 'https://picsum.photos/seed/dragonballz/600/400',
     color: 'from-yellow-400 to-red-500',
     questionCount: 100,
+    difficulty: 'medium',
   },
   {
     id: 'dbs',
@@ -27,6 +29,7 @@ export const SERIES: SeriesConfig[] = [
     image: 'https://picsum.photos/seed/dragonballsuper/600/400',
     color: 'from-blue-500 to-indigo-600',
     questionCount: 75,
+    difficulty: 'hard',
   },
   {
     id: 'gt',
@@ -36,6 +39,7 @@ export const SERIES: SeriesConfig[] = [
     image: 'https://picsum.photos/seed/dragonballgt/600/400',
     color: 'from-red-600 to-orange-600',
     questionCount: 30,
+    difficulty: 'medium',
   }
 ];
 

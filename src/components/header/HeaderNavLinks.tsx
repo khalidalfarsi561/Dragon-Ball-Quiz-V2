@@ -5,7 +5,10 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import UserAvatar from '../UserAvatar';
 import { UserRecord } from '@/lib/types';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Volume2, VolumeX } from 'lucide-react';
+import { audioController } from '@/lib/audio';
+import { useState, useEffect } from 'react';
 
 interface HeaderNavLinksProps {
   isLoggedIn: boolean;
@@ -14,6 +17,23 @@ interface HeaderNavLinksProps {
 
 export default function HeaderNavLinks({ isLoggedIn, user }: HeaderNavLinksProps) {
   const pathname = usePathname();
+  const [soundsEnabled, setSoundsEnabled] = useState(true);
+
+  // Initialize sounds state after mount to avoid hydration mismatch
+  useEffect(() => {
+    const isEnabled = audioController.isEnabled();
+    if (isEnabled !== soundsEnabled) {
+      // Defer state update to satisfy synchronous effect rule
+      Promise.resolve().then(() => {
+        setSoundsEnabled(isEnabled);
+      });
+    }
+  }, [soundsEnabled]);
+
+  const toggleSounds = () => {
+    const newState = audioController.toggle();
+    setSoundsEnabled(newState);
+  };
 
   const links = isLoggedIn 
     ? [
@@ -26,6 +46,14 @@ export default function HeaderNavLinks({ isLoggedIn, user }: HeaderNavLinksProps
 
   return (
     <nav className="flex items-center gap-4 sm:gap-6 text-sm font-medium">
+      <button 
+        onClick={toggleSounds}
+        className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-orange-500 hover:border-orange-500/50 transition-all active:scale-90"
+        title={soundsEnabled ? 'كتم الأصوات' : 'تفعيل الأصوات'}
+      >
+        {soundsEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+      </button>
+
       {links.map((link) => {
         const isActive = pathname === link.href;
         return (

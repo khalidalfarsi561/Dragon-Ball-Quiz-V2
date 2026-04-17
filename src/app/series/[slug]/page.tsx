@@ -1,6 +1,7 @@
 import { SERIES, getSeriesBySlug } from '@/lib/series';
 import { getPbServerClient } from '@/lib/pocketbase';
 import { notFound, redirect } from 'next/navigation';
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Play } from 'lucide-react';
@@ -50,9 +51,21 @@ export default async function SeriesDetailPage(props: { params: Promise<{ slug: 
         
         <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
           <div>
-            <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold tracking-wider mb-4 text-white shadow-lg bg-gradient-to-r ${series.color}`}>
-              {series.questionCount} تحديات متاحة
-            </span>
+            <div className="flex items-center gap-3 mb-4">
+              <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold tracking-wider text-white shadow-lg bg-gradient-to-r ${series.color}`}>
+                {series.questionCount} تحديات متاحة
+              </span>
+              <span className={cn(
+                "px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border shadow-xl bg-slate-950/80",
+                series.difficulty === 'easy' && "text-green-400 border-green-500/30",
+                series.difficulty === 'medium' && "text-yellow-400 border-yellow-500/30",
+                series.difficulty === 'hard' && "text-red-400 border-red-500/30",
+              )}>
+                الصعوبة: {series.difficulty === 'easy' && 'سهلة جداً'}
+                {series.difficulty === 'medium' && 'متوسطة'}
+                {series.difficulty === 'hard' && 'أسطورية صعبة'}
+              </span>
+            </div>
             <h1 className="text-4xl sm:text-5xl font-black text-white font-display mb-2 drop-shadow-md">
               {series.title}
             </h1>

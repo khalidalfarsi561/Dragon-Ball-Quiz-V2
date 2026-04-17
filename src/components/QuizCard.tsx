@@ -22,12 +22,24 @@ export default function QuizCard({ series }: { series: SeriesConfig }) {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
         
         <div className="absolute inset-x-0 bottom-0 p-4">
-          <span className={cn(
-            "inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wider mb-2 text-white bg-gradient-to-r shadow-lg shadow-black/20",
-            series.color
-          )}>
-            {series.questionCount} سؤال
-          </span>
+          <div className="flex items-center gap-2 mb-2">
+            <span className={cn(
+              "px-3 py-1 rounded-full text-xs font-bold tracking-wider text-white bg-gradient-to-r shadow-lg shadow-black/20",
+              series.color
+            )}>
+              {series.questionCount} سؤال
+            </span>
+            <span className={cn(
+              "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border shadow-lg",
+              series.difficulty === 'easy' && "bg-green-500/10 text-green-400 border-green-500/20",
+              series.difficulty === 'medium' && "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+              series.difficulty === 'hard' && "bg-red-500/10 text-red-400 border-red-500/20",
+            )}>
+              {series.difficulty === 'easy' && 'سهل'}
+              {series.difficulty === 'medium' && 'متوسط'}
+              {series.difficulty === 'hard' && 'صعب'}
+            </span>
+          </div>
           <h2 className="text-2xl font-black text-white font-display leading-tight drop-shadow-md">{series.title}</h2>
         </div>
       </div>

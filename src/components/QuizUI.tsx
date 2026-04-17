@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 import { QUIZ_TOTAL_STEPS, QUIZ_WARMUP_SECONDS, FIRST_QUESTION_NO_TIMER, DBQ_SESSION_SERIES_KEY, DBQ_SESSION_STEP_KEY, DBQ_SESSION_STARTED_AT_KEY } from '@/lib/ux';
+import { audioController } from '@/lib/audio';
+import ConfirmationModal from './ui/ConfirmationModal';
 
 import QuizWarmupOverlay from './quiz/QuizWarmupOverlay';
 import QuizSessionHeader from './quiz/QuizSessionHeader';
@@ -58,6 +60,7 @@ export default function QuizUI({
   const [result, setResult] = useState<QuizSubmitSuccess | null>(null);
   const [timeLeft, setTimeLeft] = useState(durationSeconds);
   const [warmupDone, setWarmupDone] = useState(false);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
   const hasSubmittedRef = useRef(false);
   const router = useRouter();
 
@@ -99,6 +102,11 @@ export default function QuizUI({
         setSelectedIdx(null);
       } else {
         setResult(res);
+        if (res.isCorrect) {
+          audioController.play('correct');
+        } else {
+          audioController.play('incorrect');
+        }
       }
     } catch {
       toast.error('حدث رمز خطأ غير معروف');
@@ -129,6 +137,9 @@ export default function QuizUI({
           handleTimeOut();
           return 0;
         }
+        if (prev <= 6) {
+          audioController.play('tick');
+        }
         return prev - 1;
       });
     }, 1000);
@@ -138,6 +149,7 @@ export default function QuizUI({
 
   const handleNext = () => {
     if (currentStep >= QUIZ_TOTAL_STEPS) {
+      audioController.play('levelUp');
       // Clean up session keys on completion
       sessionStorage.removeItem(DBQ_SESSION_STEP_KEY);
       sessionStorage.removeItem(DBQ_SESSION_SERIES_KEY);
@@ -163,12 +175,34 @@ export default function QuizUI({
 
   return (
     <div className="relative">
+      <ConfirmationModal 
+        isOpen={showExitConfirm}
+        onClose={() => setShowExitConfirm(false)}
+        onConfirm={() => {
+          sessionStorage.removeItem(DBQ_SESSION_STEP_KEY);
+          router.push('/series');
+        }}
+        title="تنبيه المقاتل!"
+        message="هل أنت متأكد من رغبتك في الانسحاب؟ ستفقد كل تقدمك في هذه الجولة."
+        confirmLabel="نعم، انسحب"
+        cancelLabel="البقاء في القتال"
+      />
+
       <QuizWarmupOverlay 
         key={`warmup-${question.id}`}
         open={!warmupDone && !result} 
         seconds={QUIZ_WARMUP_SECONDS} 
         onComplete={() => setWarmupDone(true)} 
       />
+
+      <div className="absolute -top-4 right-0 z-20">
+        <button 
+          onClick={() => setShowExitConfirm(true)}
+          className="bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 px-4 py-2 rounded-xl text-xs font-black transition-all border border-red-500/20 shadow-xl"
+        >
+          انسحاب
+        </button>
+      </div>
 
       <QuizSessionHeader 
         seriesTitle={seriesTitle}
